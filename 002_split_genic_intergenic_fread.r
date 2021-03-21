@@ -1,0 +1,6 @@
+library(rrBLUP)
+library(data.table)
+args = commandArgs(trailingOnly=TRUE)
+keep <- read.table(args[1],head=F,sep='\t',stringsAsFactors=F)
+geno <- fread('geno.csv',select=c('ID',keep[,1]))
+fwrite(geno,'geno_new.csv',sep = ",",quote=FALSE)
