@@ -9,7 +9,9 @@
  - python 02_filter_genotype_matrix_MAF_missing_data.py -file genotype_matrix
  
 > 3. classify the variation into SNP, indel, or SNP/indel; biallelic or non-biallelic; in genic or intergenic, three_UTR or five_UTR region, exonic or intronic, splicing regions
+
 ** Note that, this script is for switchgrass specifically. For other species, be careful about the gff format and the how the gene names are encoded**
+
  - python 03_classify_variations.py -file genotype_matrix_filtered -gff gff_file
 
 > 4. extract the biallelic SNPs or indels
