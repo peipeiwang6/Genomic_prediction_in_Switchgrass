@@ -22,7 +22,7 @@
  - python 05_convert_genotype_matrix_to_fastPHASE_format.py -file 1011Matrix_genotype_matrix.txt_filtered_biallelic_SNP.txt
  
 > 6. download and install the fastPHASE (http://scheet.org/software.html or copy from /mnt/home/peipeiw/Documents/Genome_selection/fastPHASE/phase.2.1.1.linux.tar)
-./fastPHASE -T10 -oName_for_output 1011Matrix_genotype_matrix.txt_filtered_biallelic_SNP.txt_fastPHASE.txt
+ - ./fastPHASE -T10 -oName_for_output 1011Matrix_genotype_matrix.txt_filtered_biallelic_SNP.txt_fastPHASE.txt
 
 > 7. convert the imputed genotype matrix back to the format used previously
  - python 06_convert_imputed_biallelic_variation_to_genotype.py -matrix 1011Matrix_genotype_matrix.txt_filtered_biallelic_SNP.txt -imputed_matrix Name_for_output_hapguess_switch.out
