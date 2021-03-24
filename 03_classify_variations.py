@@ -11,6 +11,127 @@ def warn(*args, **kwargs):
 import warnings
 warnings.warn = warn
 
+def judge(ref,alt):
+	T = {}
+	for snp in alt.split(','):
+		if len(ref) == len(snp) and '*' not in snp:
+			T['SNP'] = 1
+		else:
+			T['indel'] = 1
+	return '/'.join(sorted(T.keys()))
+
+def location(chr,pos):
+	genic = 0
+	if chr in GFF['gene']:
+		for left in GFF['gene'][chr]:
+			if len(GFF['gene'][chr][left]) >= 3: ### the left is unique to a gene
+				if left <= pos and GFF['gene'][chr][left][1] >= pos:
+					genic = 1
+					gene_name = GFF['gene'][chr][left][2]
+					res = []
+					for mRNA_name in G[gene_name]: ### if in exonic and intronic regions in different transcripts, then location = 'splicing'
+						exonic = 0
+						five_UTR = 0
+						three_UTR = 0
+						for cds_name in G[gene_name][mRNA_name]['CDS']:
+							if GFF['CDS'][chr][cds_name][2] <= pos and GFF['CDS'][chr][cds_name][1] >= pos:
+								exonic = 1
+						if exonic == 0:
+							if exonic == 0:
+								try:
+									for three_name in G[gene_name][mRNA_name]['three_prime_UTR']:
+										if GFF['three_prime_UTR'][chr][three_name][2] <= pos and GFF['three_prime_UTR'][chr][three_name][1] >= pos:
+											three_UTR = 1
+									if three_UTR == 0:
+										for five_name in G[gene_name][mRNA_name]['five_prime_UTR']:
+											try:
+												if GFF['five_prime_UTR'][chr][five_name][2] <= pos and GFF['five_prime_UTR'][chr][five_name][1] >= pos:
+													five_UTR = 1
+											except:
+												print('No five UTR for %s'%gene_name)
+								except:
+									print('No three UTR for %s'%gene_name)
+						res.append([exonic,five_UTR,three_UTR])
+					mul = 1
+					sum = 0
+					sum3 = 0
+					sum5 = 0
+					for result in res:
+						mul = mul*result[0]
+						sum = sum + result[0]
+						sum3 = sum3 + result[2]
+						sum5 = sum5 + result[1]
+					if mul == 1:
+						location = 'exonic'
+					if mul == 0 and sum >= 1:
+						location = 'splicing'
+					if sum == 0:
+						if sum3 >= 1 and sum5 == 0:
+							location = 'three_UTR'
+						if sum5 >= 1 and sum3 == 0:
+							location = 'five_UTR'
+						if sum3 >= 1 and sum5 >= 1:
+							print('something is wrong with %s_%s'%(chr,pos))
+						if sum3 == 0 and sum5 == 0:
+							location = 'intronic'
+					break
+			if len(GFF['gene'][chr][left]) > 3: ### the left is not unique to a gene
+				for j in range(3,len(GFF['gene'][chr][left])):
+					if left < pos and GFF['gene'][chr][left][j][1] > pos:
+						genic = 1
+						gene_name = GFF['gene'][chr][left][j][2]
+						res = []
+						for mRNA_name in G[gene_name]: ### if in exonic and intronic regions in different transcripts, then location = 'splicing'
+							exonic = 0
+							five_UTR = 0
+							three_UTR = 0
+							for cds_name in G[gene_name][mRNA_name]['CDS']:
+								if GFF['CDS'][chr][cds_name][2] <= pos and GFF['CDS'][chr][cds_name][1] >= pos:
+									exonic = 1
+							if exonic == 0:
+								try:
+									for three_name in G[gene_name][mRNA_name]['three_prime_UTR']:
+										if GFF['three_prime_UTR'][chr][three_name][2] <= pos and GFF['three_prime_UTR'][chr][three_name][1] >= pos:
+											three_UTR = 1
+									if three_UTR == 0:
+										for five_name in G[gene_name][mRNA_name]['five_prime_UTR']:
+											try:
+												if GFF['five_prime_UTR'][chr][five_name][2] <= pos and GFF['five_prime_UTR'][chr][five_name][1] >= pos:
+													five_UTR = 1
+											except:
+												print('No five UTR for %s'%gene_name)
+								except:
+									print('No three UTR for %s'%gene_name)
+							res.append([exonic,five_UTR,three_UTR])
+						mul = 1
+						sum = 0
+						sum3 = 0
+						sum5 = 0
+						for result in res:
+							mul = mul*result[0]
+							sum = sum + result[0]
+							sum3 = sum3 + result[2]
+							sum5 = sum5 + result[1]
+						if mul == 1:
+							location = 'exonic'
+						if mul == 0 and sum >= 1:
+							location = 'splicing'
+						if sum == 0:
+							if sum3 >= 1 and sum5 == 0:
+								location = 'three_UTR'
+							if sum5 >= 1 and sum3 == 0:
+								location = 'five_UTR'
+							if sum3 >= 1 and sum5 >= 1:
+								print('something is wrong with %s_%s'%(chr,pos))
+							if sum3 == 0 and sum5 == 0:
+								location = 'intronic'
+						break
+		if genic == 0:
+			location = 'intergenic'
+	else:
+		location = 'intergenic'
+	return(location)	
+
 def main():
 	parser = argparse.ArgumentParser(description='This code is for classifying the variation into SNP, indel, or SNP/indel; biallelic or non-biallelic; in genic or intergenic, three_UTR or five_UTR region, exonic or intronic, splicing regions')
 	# Required
@@ -78,128 +199,6 @@ def main():
 					GFF[type][chr][left].append([dir,right,name])
 			if type == 'CDS' or type =='five_prime_UTR' or type == 'three_prime_UTR':
 				GFF[type][chr][name] = [dir,right,left]
-			
-	def judge(ref,alt):
-		T = {}
-		for snp in alt.split(','):
-			if len(ref) == len(snp) and '*' not in snp:
-				T['SNP'] = 1
-			else:
-				T['indel'] = 1
-		return '/'.join(sorted(T.keys()))
-
-	def location(chr,pos):
-		genic = 0
-		if chr in GFF['gene']:
-			for left in GFF['gene'][chr]:
-				if len(GFF['gene'][chr][left]) >= 3: ### the left is unique to a gene
-					if left <= pos and GFF['gene'][chr][left][1] >= pos:
-						genic = 1
-						gene_name = GFF['gene'][chr][left][2]
-						res = []
-						for mRNA_name in G[gene_name]: ### if in exonic and intronic regions in different transcripts, then location = 'splicing'
-							exonic = 0
-							five_UTR = 0
-							three_UTR = 0
-							for cds_name in G[gene_name][mRNA_name]['CDS']:
-								if GFF['CDS'][chr][cds_name][2] <= pos and GFF['CDS'][chr][cds_name][1] >= pos:
-									exonic = 1
-							if exonic == 0:
-								if exonic == 0:
-									try:
-										for three_name in G[gene_name][mRNA_name]['three_prime_UTR']:
-											if GFF['three_prime_UTR'][chr][three_name][2] <= pos and GFF['three_prime_UTR'][chr][three_name][1] >= pos:
-												three_UTR = 1
-										if three_UTR == 0:
-											for five_name in G[gene_name][mRNA_name]['five_prime_UTR']:
-												try:
-													if GFF['five_prime_UTR'][chr][five_name][2] <= pos and GFF['five_prime_UTR'][chr][five_name][1] >= pos:
-														five_UTR = 1
-												except:
-													print('No five UTR for %s'%gene_name)
-									except:
-										print('No three UTR for %s'%gene_name)
-							res.append([exonic,five_UTR,three_UTR])
-						mul = 1
-						sum = 0
-						sum3 = 0
-						sum5 = 0
-						for result in res:
-							mul = mul*result[0]
-							sum = sum + result[0]
-							sum3 = sum3 + result[2]
-							sum5 = sum5 + result[1]
-						if mul == 1:
-							location = 'exonic'
-						if mul == 0 and sum >= 1:
-							location = 'splicing'
-						if sum == 0:
-							if sum3 >= 1 and sum5 == 0:
-								location = 'three_UTR'
-							if sum5 >= 1 and sum3 == 0:
-								location = 'five_UTR'
-							if sum3 >= 1 and sum5 >= 1:
-								print('something is wrong with %s_%s'%(chr,pos))
-							if sum3 == 0 and sum5 == 0:
-								location = 'intronic'
-						break
-				if len(GFF['gene'][chr][left]) > 3: ### the left is not unique to a gene
-					for j in range(3,len(GFF['gene'][chr][left])):
-						if left < pos and GFF['gene'][chr][left][j][1] > pos:
-							genic = 1
-							gene_name = GFF['gene'][chr][left][j][2]
-							res = []
-							for mRNA_name in G[gene_name]: ### if in exonic and intronic regions in different transcripts, then location = 'splicing'
-								exonic = 0
-								five_UTR = 0
-								three_UTR = 0
-								for cds_name in G[gene_name][mRNA_name]['CDS']:
-									if GFF['CDS'][chr][cds_name][2] <= pos and GFF['CDS'][chr][cds_name][1] >= pos:
-										exonic = 1
-								if exonic == 0:
-									try:
-										for three_name in G[gene_name][mRNA_name]['three_prime_UTR']:
-											if GFF['three_prime_UTR'][chr][three_name][2] <= pos and GFF['three_prime_UTR'][chr][three_name][1] >= pos:
-												three_UTR = 1
-										if three_UTR == 0:
-											for five_name in G[gene_name][mRNA_name]['five_prime_UTR']:
-												try:
-													if GFF['five_prime_UTR'][chr][five_name][2] <= pos and GFF['five_prime_UTR'][chr][five_name][1] >= pos:
-														five_UTR = 1
-												except:
-													print('No five UTR for %s'%gene_name)
-									except:
-										print('No three UTR for %s'%gene_name)
-								res.append([exonic,five_UTR,three_UTR])
-							mul = 1
-							sum = 0
-							sum3 = 0
-							sum5 = 0
-							for result in res:
-								mul = mul*result[0]
-								sum = sum + result[0]
-								sum3 = sum3 + result[2]
-								sum5 = sum5 + result[1]
-							if mul == 1:
-								location = 'exonic'
-							if mul == 0 and sum >= 1:
-								location = 'splicing'
-							if sum == 0:
-								if sum3 >= 1 and sum5 == 0:
-									location = 'three_UTR'
-								if sum5 >= 1 and sum3 == 0:
-									location = 'five_UTR'
-								if sum3 >= 1 and sum5 >= 1:
-									print('something is wrong with %s_%s'%(chr,pos))
-								if sum3 == 0 and sum5 == 0:
-									location = 'intronic'
-							break
-			if genic == 0:
-				location = 'intergenic'
-		else:
-			location = 'intergenic'
-		return(location)	
-		
 		
 	inp = open(file,'r').readlines()
 	out = open(file + '_classification.txt','w')
