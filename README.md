@@ -1,6 +1,7 @@
 # Genomic_prediction_in_Switchgrass
 
 ## Pre-processing
+### Note that when using python script in HPCC, please module load Python/3.6.4
 
 > 1. convert vcf file to genetic matrix
  - python 01_conver_genotype_gvcf_to_genotype_matrix.py -file your_vcf
@@ -8,7 +9,7 @@
 > 2. filter the genotype matrix
  - python 02_filter_genotype_matrix_MAF_missing_data.py -file genotype_matrix
  
-### Note that if you only want to get the biallelic SNPs or indels, rather than the classification of markers to genic, intergenic, etc, please skip step 3 and 4, and try the script below:**
+### Note that if you only want to get the biallelic SNPs or indels, rather than the classification of markers to genic, intergenic, etc, please skip step 3 and 4, and try the script below:
  - python 03_get_biallelic_markers_directly.py -file 1011Matrix_genotype_matrix.txt_filtered -type SNP
 
 > 3. classify the variation into SNP, indel, or SNP/indel; biallelic or non-biallelic; in genic or intergenic, three_UTR or five_UTR region, exonic or intronic, splicing regions
@@ -31,4 +32,31 @@
  - python 06_convert_imputed_biallelic_variation_to_genotype.py -matrix 1011Matrix_genotype_matrix.txt_filtered_biallelic_SNP.txt -imputed_matrix Name_for_output_hapguess_switch.out
  
  
+## Now you can build the genomic prediction models, using the rrBLUP
+### Note that make sure you have the geno and pheno matrices beforehand.
+> 8. make CVs file, which will be used for the cross-validation scheme, here 5-fold cross-validation scheme is repeated 10 times
+ - python 07_make_CVs.py pheno.csv 5 10
+
+> 9. get the population structure, which is defined as the top 5 pricinple components from the genetic markers
+ - Rscript 08_getPCs.r geno.csv pheno.csv
+
+### The logical for the script is that: for each cross-validation fold, using the training fold to build a model, then apply the model to the validation fold. So now you have the predicted values for individuals in the  validation fold. After run for each of the CV fold, you would have the predicted values for all your individuals. Finally, the r2 was calculated using the true and predicted values of all your individuals. This will be repeat n times as you set and n r2 values will be reported.
+> 10. genomic prediction using the genetic markers or population structure within a cross-validation scheme
+ - Rscript 09_rrBLUP.r geno.csv pheno.csv all all 5 10 CVFs.csv exome_geno
+ - Rscript 09_rrBLUP.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
+
+### The logical for the script is that: first X% of all the individuals will be held out as test set, which will never be used in the model training process, the remaining 1-X% will be used to train the model, using exactly the same approach as step 10. For each cv fold, the model was also applied to the test set, and after run for all the cv folds, the average r2 across n cv folds will be used for the test set. Since I did 5-fold CV, thus 1/6 of individuals will be used as test set, and the remaining 5/6 individuals will be used in the  5-fold cv.
+> 11. hold out individuals for test set, do the stratified sampling
+ - Rscript 10_holdout_test_stratified.py pheno.csv target_trait 6
+
+> 12. if you want to do feature selection, then you should build models without the test set. So first, get the matrix for the training set, make the CVs file using the training individuals, then build models using the training matrices and output the coef of markers
+ - Rscript 11_split_geno_pheno.r geno.csv pheno.csv Test.txt
+ - python 07_make_CVs.py pheno_training.csv 5 10
+ - Rscript 09_rrBLUP.r geno_training.csv pheno_training.csv all target_trait 5 10 CVFs.csv exome_geno
+ 
+> 13. select the number of markers based on the abs coef
+ - python 12_select_markers_according_to_abs_coef.py coef_file 250 5250 250
+
+> 14. genomic prediction using the genetic markers or population structure within a cross-validation scheme
+ - Rscript 13_rrBLUP_training_test_split.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv exome_geno
 
