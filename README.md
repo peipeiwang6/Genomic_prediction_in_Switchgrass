@@ -40,7 +40,7 @@
 > 9. get the population structure, which is defined as the top 5 pricinple components from the genetic markers
  - Rscript 08_getPCs.r geno.csv pheno.csv
 
-#### The logical for the script is that: for each cross-validation fold, using the training fold to build a model, then apply the model to the validation fold. So now you have the predicted values for individuals in the  validation fold. After run for each of the CV fold, you would have the predicted values for all your individuals. Finally, the r2 was calculated using the true and predicted values of all your individuals. This will be repeated n times as you set and n r2 values will be reported.
+#### The logical for the following script is that: for each cross-validation fold, using the training fold to build a model, then apply the model to the validation fold. So now you have the predicted values for individuals in the  validation fold. After run for each of the CV fold, you would have the predicted values for all your individuals. Finally, the r2 was calculated using the true and predicted values of all your individuals. This will be repeated n times as you set and n r2 values will be reported.
 > 10. genomic prediction using the genetic markers or population structure within a cross-validation scheme
 
 > *If you have very large matrix, please try the 09_rrBLUP_fread.r instead.*
@@ -48,9 +48,8 @@
  - Rscript 09_rrBLUP.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
 
 
-### Steps 11-14 are how I did the feature selection. Markers were selected using the training set, and in the end, models built using selected markers were applied on the test set.
+### Steps 11-14 are how I did the feature selection. Markers were selected using the training set, and in the end, models built using selected markers were applied on the test set. Since I did 5-fold CV, thus 1/6 of individuals will be used as test set, and the remaining 5/6 individuals will be used in the 5-fold cv.
 
-#### The logical for the script is that: first X% of all the individuals will be held out as test set, which will never be used in the model training process, the remaining 1-X% will be used to train the model, using exactly the same approach as step 10. For each cv fold, the model was also applied to the test set, and after run for all the cv folds, the average r2 across n cv folds will be used for the test set. Since I did 5-fold CV, thus 1/6 of individuals will be used as test set, and the remaining 5/6 individuals will be used in the 5-fold cv.
 > 11. hold out individuals for test set, do the stratified sampling
  - Rscript 10_holdout_test_stratified.py pheno.csv target_trait 6
 
@@ -65,6 +64,8 @@
  - python 12_select_markers_according_to_abs_coef.py coef_file 250 5250 250
 
 > 14. genomic prediction using the genetic markers or population structure within a cross-validation scheme
+
+#### The logical for the following script is that: first X% of all the individuals will be held out as test set, which will never be used in the model training process, the remaining 1-X% will be used to train the model, using exactly the same approach as step 10. For each cv fold, the model was also applied to the test set, and after run for all the cv folds, the average r2 across n cv folds will be used for the test set. 
 
 > *If you have very large matrix, please try the 13_rrBLUP_training_test_split_fread.r instead.*
  - Rscript 13_rrBLUP_training_test_split.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv exome_geno
