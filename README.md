@@ -51,12 +51,19 @@
 
 > 12. if you want to do feature selection, then you should build models without the test set. So first, get the matrix for the training set, make the CVs file using the training individuals, then build models using the training matrices and output the coef of markers
  - Rscript 11_split_geno_pheno.r geno.csv pheno.csv Test.txt
+#### if your matrix is too big, try this:
+ - Rscript 11_split_geno_pheno_fread.r geno.csv pheno.csv Test.txt
+ 
  - python 07_make_CVs.py pheno_training.csv 5 10
  - Rscript 09_rrBLUP.r geno_training.csv pheno_training.csv all target_trait 5 10 CVFs.csv exome_geno
- 
+#### if your matrix is too big, try this:
+ - Rscript 09_rrBLUP_fread.r geno_training.csv pheno_training.csv all target_trait 5 10 CVFs.csv exome_geno
+
 > 13. select the number of markers based on the abs coef
  - python 12_select_markers_according_to_abs_coef.py coef_file 250 5250 250
 
 > 14. genomic prediction using the genetic markers or population structure within a cross-validation scheme
  - Rscript 13_rrBLUP_training_test_split.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv exome_geno
+#### if your matrix is too big, try this:
+ - Rscript 13_rrBLUP_training_test_split_fread.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv exome_geno
 
