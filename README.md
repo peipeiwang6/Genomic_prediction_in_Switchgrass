@@ -48,6 +48,8 @@
  - Rscript 09_rrBLUP.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
 
 ### The logical for the script is that: first X% of all the individuals will be held out as test set, which will never be used in the model training process, the remaining 1-X% will be used to train the model, using exactly the same approach as step 10. For each cv fold, the model was also applied to the test set, and after run for all the cv folds, the average r2 across n cv folds will be used for the test set. Since I did 5-fold CV, thus 1/6 of individuals will be used as test set, and the remaining 5/6 individuals will be used in the 5-fold cv.
+
+#### Step 11-14 is the way how I did the feature selection. Markers were selected using the training set, and in the end, models built using selected markers were applied on the test set.
 > 11. hold out individuals for test set, do the stratified sampling
  - Rscript 10_holdout_test_stratified.py pheno.csv target_trait 6
 
