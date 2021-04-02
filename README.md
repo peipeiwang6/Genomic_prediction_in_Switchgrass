@@ -41,6 +41,7 @@
  - Rscript 08_getPCs.r geno.csv pheno.csv
 
 ### The logical for the script is that: for each cross-validation fold, using the training fold to build a model, then apply the model to the validation fold. So now you have the predicted values for individuals in the  validation fold. After run for each of the CV fold, you would have the predicted values for all your individuals. Finally, the r2 was calculated using the true and predicted values of all your individuals. This will be repeat n times as you set and n r2 values will be reported.
+### If you have very large matrix, please try the 09_rrBLUP_fread.r instead.
 > 10. genomic prediction using the genetic markers or population structure within a cross-validation scheme
  - Rscript 09_rrBLUP.r geno.csv pheno.csv all all 5 10 CVFs.csv exome_geno
  - Rscript 09_rrBLUP.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
@@ -51,12 +52,12 @@
 
 > 12. if you want to do feature selection, then you should build models without the test set. So first, get the matrix for the training set, make the CVs file using the training individuals, then build models using the training matrices and output the coef of markers
  - Rscript 11_split_geno_pheno.r geno.csv pheno.csv Test.txt
-#### if your matrix is too big, try this:
+> if your matrix is too big, try this:
  - Rscript 11_split_geno_pheno_fread.r geno.csv pheno.csv Test.txt
  
  - python 07_make_CVs.py pheno_training.csv 5 10
  - Rscript 09_rrBLUP.r geno_training.csv pheno_training.csv all target_trait 5 10 CVFs.csv exome_geno
-#### if your matrix is too big, try this:
+> if your matrix is too big, try this:
  - Rscript 09_rrBLUP_fread.r geno_training.csv pheno_training.csv all target_trait 5 10 CVFs.csv exome_geno
 
 > 13. select the number of markers based on the abs coef
@@ -64,6 +65,6 @@
 
 > 14. genomic prediction using the genetic markers or population structure within a cross-validation scheme
  - Rscript 13_rrBLUP_training_test_split.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv exome_geno
-#### if your matrix is too big, try this:
+> if your matrix is too big, try this:
  - Rscript 13_rrBLUP_training_test_split_fread.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv exome_geno
 
