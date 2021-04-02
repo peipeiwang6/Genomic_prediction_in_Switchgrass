@@ -42,6 +42,7 @@
 
 ### The logical for the script is that: for each cross-validation fold, using the training fold to build a model, then apply the model to the validation fold. So now you have the predicted values for individuals in the  validation fold. After run for each of the CV fold, you would have the predicted values for all your individuals. Finally, the r2 was calculated using the true and predicted values of all your individuals. This will be repeat n times as you set and n r2 values will be reported.
 > 10. genomic prediction using the genetic markers or population structure within a cross-validation scheme
+
 > *If you have very large matrix, please try the 09_rrBLUP_fread.r instead.*
  - Rscript 09_rrBLUP.r geno.csv pheno.csv all all 5 10 CVFs.csv exome_geno
  - Rscript 09_rrBLUP.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
