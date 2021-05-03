@@ -7,7 +7,7 @@ feat_file <- args[3] # selected features or "all" for all the markers in the gen
 trait <- args[4] # the column name of your target trait, or "all" for all the traits in the pheno matrix
 cv <- as.numeric(args[5]) # the fold number of the cross-validation scheme
 number <- as.numeric(args[6]) # how many times your want to repeat the cross-validation scheme
-cvs_file <- as.numeric(args[7]) # the CVs file
+cvs_file <- args[7] # the CVs file
 save_name <- args[8] # a short name for your file to be saved
 
 Y <- read.csv(Y_file, row.names=1) 
