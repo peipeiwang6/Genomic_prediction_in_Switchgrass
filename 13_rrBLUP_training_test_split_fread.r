@@ -24,7 +24,7 @@ if (feat_file != 'all'){
   feat_method <- tail(unlist(strsplit(feat_file, '/')), n=1)
   X <- read.csv(paste('geno',feat_file,'.csv',sep=''), row.names=1) 
 } else{
-	X <- fread(X_file) 
+	X <- as.matrix(fread(X_file),rownames=1)
 	}
 
 # make sure X and Y have the same order of rows
