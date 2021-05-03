@@ -23,7 +23,7 @@ if (feat_file != 'all'){
   feat_method <- tail(unlist(strsplit(feat_file, '/')), n=1)
   X <- read.csv(paste('geno',feat_file,'.csv',sep=''), row.names=1) 
 } else{
-	X <- read.csv(X_file, row.names=1) 
+	X <- fread(X_file)
 	}
 
 # make sure X and Y have the same order of rows
