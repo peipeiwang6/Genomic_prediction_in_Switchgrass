@@ -57,7 +57,7 @@
 
 > *If you have very large matrix, please try the 11_split_geno_pheno_fread.r and 09_rrBLUP_fread.r instead.*
  - Rscript 11_split_geno_pheno.r geno.csv pheno.csv Test.txt
- - python 07_make_CVs.py pheno_training.csv 5 10
+ - python 07_make_CVs.py -file pheno.csv -cv 5 -number 10
  - Rscript 09_rrBLUP.r geno_training.csv pheno_training.csv all target_trait 5 10 CVFs.csv exome_geno
 
 > Step 13. select the number of markers based on the abs coef
