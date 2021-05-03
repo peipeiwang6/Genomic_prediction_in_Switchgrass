@@ -8,7 +8,7 @@ trait <- args[4] # the column name of your target trait, or "all" for all the tr
 test_file <- args[5] # file with individuals in test set
 cv <- as.numeric(args[6]) # the fold number of the cross-validation scheme
 number <- as.numeric(args[7]) # how many times your want to repeat the cross-validation scheme
-cvs_file <- as.numeric(args[8]) # the CVs file
+cvs_file <- args[8] # the CVs file
 save_name <- args[9]
 
 Y <- read.csv(Y_file, row.names=1) 
