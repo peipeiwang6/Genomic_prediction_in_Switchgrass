@@ -35,7 +35,7 @@
 ## Now you can build the genomic prediction models, using the rrBLUP
 ### Note that make sure you have the geno and pheno matrices beforehand.
 > Step 8. make CVs file, which will be used for the cross-validation scheme, here 5-fold cross-validation scheme is repeated 10 times
- - python 07_make_CVs.py pheno.csv 5 10
+ - python 07_make_CVs.py -file pheno.csv -cv 5 -number 10
 
 > Step 9. get the population structure, which is defined as the top 5 pricinple components from the genetic markers
  - Rscript 08_getPCs.r geno.csv pheno.csv
