@@ -51,7 +51,7 @@
 ### Steps 11-14 are how I did the feature selection. Markers were selected using the training set, and in the end, models built using selected markers were applied on the test set. Since I did 5-fold CV, thus 1/6 of individuals will be used as test set, and the remaining 5/6 individuals will be used in the 5-fold cv.
 
 > Step 11. hold out individuals for test set, do the stratified sampling
- - Rscript 10_holdout_test_stratified.py pheno.csv target_trait 6
+ - python 10_holdout_test_stratified.py pheno.csv target_trait 6
 
 > Step 12. if you want to do feature selection, then you should build models without the test set. So first, get the matrix for the training set, make the CVs file using the training individuals, then build models using the training matrices and output the coef of markers
 
