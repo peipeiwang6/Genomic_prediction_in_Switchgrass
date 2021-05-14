@@ -11,8 +11,8 @@ Test <- read.table(test_file, head=F,sep='\t',stringsAsFactors=F)
 
 X_test <- X[Test[,1],]
 Y_test <- Y[Test[,1],]
-X <- X[!rownames(X) %in% Test[,1],]
-Y <- Y[!rownames(Y) %in% Test[,1],]
+X <- X[!rownames(X) %in% Test[,1],, drop=False]
+Y <- Y[!rownames(Y) %in% Test[,1],, drop=False]
 write.csv(X,'geno_training.csv',row.names=T,quote=F)
 write.csv(Y,'pheno_training.csv',row.names=T,quote=F)
 write.csv(X_test,'geno_test.csv',row.names=T,quote=F)
