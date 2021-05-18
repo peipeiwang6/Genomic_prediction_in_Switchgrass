@@ -61,7 +61,7 @@
  - Rscript 09_rrBLUP.r geno_training.csv pheno_training.csv all target_trait 5 10 CVFs.csv exome_geno
 
 > Step 13. select the number of markers based on the abs coef
- - python 12_select_markers_according_to_abs_coef.py coef_file 250 5250 250
+ - python 12_select_markers_according_to_abs_coef.py  -coef coef_file -start 250 -stop 5250 -step 250
 
 > Step 14. genomic prediction using the genetic markers or population structure within a cross-validation scheme
 
