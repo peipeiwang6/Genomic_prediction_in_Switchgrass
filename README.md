@@ -68,5 +68,7 @@
 #### The logical for the following script is that: first X% of all the individuals will be held out as test set, which will never be used in the model training process, the remaining 1-X% will be used to train the model, using exactly the same approach as step 10. For each cv fold, the model was also applied to the test set, and after run for all the cv folds, the average r2 across n cv folds will be used for the test set. 
 
 > *If you have very large matrix, please try the 13_rrBLUP_training_test_split_fread.r instead.*
- - Rscript 13_rrBLUP_training_test_split.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv exome_geno
+ - Rscript 13_rrBLUP_training_test_split.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv selected_markers_geno
 
+> Step 15. get the prediction using the top 5 PCs for selected markers
+ - Rscript 14_rrBLUP_pca_for_selected_markers.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv selected_markers_PCA
