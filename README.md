@@ -39,6 +39,13 @@
 
 > Step 9. get the population structure, which is defined as the top 5 pricinple components from the genetic markers
  - Rscript 08_getPCs.r geno.csv pheno.csv
+ 
+###### Note that if you have too large geno matrix, try the following two steps to get the top five PCs
+> Step 9_1. remove constant columns in the geno matrix
+ - python 08_1_remove_constant_columns.py geno.csv
+ 
+> Step 9_2. get the top 5 PCs
+ - Rscript 08_2_PCA_after_removing.r geno_non_constant.csv
 
 #### The logical for the following script is that: for each cross-validation fold, using the training fold to build a model, then apply the model to the validation fold. So now you have the predicted values for individuals in the  validation fold. After run for each of the CV fold, you would have the predicted values for all your individuals. Finally, the r2 was calculated using the true and predicted values of all your individuals. This will be repeated n times as you set and n r2 values will be reported.
 > Step 10. genomic prediction using the genetic markers or population structure within a cross-validation scheme
@@ -70,5 +77,5 @@
 > *If you have very large matrix, please try the 13_rrBLUP_training_test_split_fread.r instead.*
  - Rscript 13_rrBLUP_training_test_split.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv selected_markers_geno
 
-> Step 15. get the prediction using the top 5 PCs for selected markers
+> Step 15. get the prediction using the top 5 PCs for selected markers. Make sure the title of the first column in your geno matrix is "ID".
  - Rscript 14_rrBLUP_pca_for_selected_markers.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv selected_markers_PCA
