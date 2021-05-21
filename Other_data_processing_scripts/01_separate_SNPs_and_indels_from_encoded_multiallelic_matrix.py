@@ -8,7 +8,7 @@ indel.write(inp[0])
 D = {}
 for k in range(1,len(inp)):
 	inl = inp[k]
-	tem = inl.split('\t')
+	tem = inl.strip().split('\t')
 	if '%s__%s'%(tem[0],tem[1]) not in D:
 		D['%s__%s'%(tem[0],tem[1])] = 1
 		if len(tem[3])==1 and len(tem[2])==1 and tem[3] != '*':
@@ -22,7 +22,7 @@ for k in range(1,len(inp)):
 					new[3] = tem[3][i]
 					for j in range(4,len(tem)):
 						new[j] = '%s/%s'%(tem[j].split('/')[0][i],tem[j].split('/')[1][i])
-					snp.write('\t'.join(new))
+					snp.write('\t'.join(new) + '\n')
 		else:
 			indel.write(inl)
 
