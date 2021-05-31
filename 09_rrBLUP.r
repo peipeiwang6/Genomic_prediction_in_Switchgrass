@@ -58,6 +58,8 @@ for(i in 1:length(Y)){
 			# predict breeding 
 			rrblup <- mixed.solve(y=yNA, K=A.mat(X))
 			yhat$yhat[validation] <- rrblup$u[validation]
+			# Note that the breeding trait values can be calculated as below. The final accuracy is almost the same as code in above.
+			# yhat$yhat[validation] <- (X[validation,] %*% coeff$u)[,1] + coeff$beta
 			}
 		accuracy <- cor(yhat[,i], yhat$yhat)
 		Accuracy <- c(Accuracy,accuracy^2)
