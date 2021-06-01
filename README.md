@@ -77,5 +77,6 @@
 > *If you have very large matrix, please try the 13_rrBLUP_training_test_split_fread.r instead.*
  - Rscript 13_rrBLUP_training_test_split.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv selected_markers_geno
 
-> Step 15. get the prediction using the top 5 PCs for selected markers. Make sure the title of the first column in your geno matrix is "ID".
- - Rscript 14_rrBLUP_pca_for_selected_markers.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv selected_markers_PCA
+> Step 15. get the prediction using the top 5 PCs for ramdomly selected markers. Make sure the title of the first column in your geno matrix is "ID".
+ - Rscript 14_random_select_subset.r geno_file start stop step total_number
+ - Rscript 15_rrBLUP_pca_for_subset_markers.r geno_250.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv Random_250_markers_pca
