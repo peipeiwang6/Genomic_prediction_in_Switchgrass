@@ -80,3 +80,4 @@
 > Step 15. get the prediction using the top 5 PCs for ramdomly selected markers. Make sure the title of the first column in your geno matrix is "ID".
  - Rscript 14_random_select_subset.r geno_file start stop step total_number
  - Rscript 15_rrBLUP_pca_for_subset_markers.r geno_250.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv Random_250_markers_pca
+ 
