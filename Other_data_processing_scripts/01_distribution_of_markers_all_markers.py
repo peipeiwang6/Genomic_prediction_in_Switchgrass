@@ -122,6 +122,7 @@ GBS_markers.close()
 df = pd.read_csv('Markers_distribution_all_markers.txt',header=None,index_col=None,sep='\t')
 df['Marker'] = df.apply(lambda row: '%s_%s'%(row[1],row[7]), axis = 1)
 df['distance'] = abs(df[8])
+df.loc[df[4]=='Downstream','distance'] = abs(df.loc[df[4]=='Downstream',8] - 3500)
 df['Type'] = 0
 df.loc[df[4]=='Upstream','Type'] = 1
 df.loc[df[4]=='Downstream','Type'] = 1
