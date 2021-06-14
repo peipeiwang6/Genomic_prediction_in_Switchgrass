@@ -51,11 +51,11 @@
 > Step 10. genomic prediction using the genetic markers or population structure within a cross-validation scheme
 
 > *If you have very large matrix, please try the 09_rrBLUP_fread.r instead.*
+> ###### 09_rrBLUP_fread_PCs.r builds a simple linear regression model using the PCs, which has almost the same results of models built using mixed.solve from rrBLUP
  - Rscript 09_rrBLUP.r geno.csv pheno.csv all all 5 10 CVFs.csv exome_geno
  - Rscript 09_rrBLUP.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
  or
  - Rscript 09_rrBLUP_fread_PCs.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
-###### 09_rrBLUP_fread_PCs.r builds a simple linear regression model using the PCs, which has almost the same results of models built using mixed.solve from rrBLUP
 
 
 ### Steps 11-14 are how I did the feature selection. Markers were selected using the training set, and in the end, models built using selected markers were applied on the test set. Since I did 5-fold CV, thus 1/6 of individuals will be used as test set, and the remaining 5/6 individuals will be used in the 5-fold cv.
