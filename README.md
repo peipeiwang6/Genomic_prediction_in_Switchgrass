@@ -51,6 +51,7 @@
 > Step 10. genomic prediction using the genetic markers or population structure within a cross-validation scheme
 
 > *If you have very large matrix, please try the 09_rrBLUP_fread.r instead.*
+
 > Note: 09_rrBLUP_fread_PCs.r builds a simple linear regression model using the PCs, which has almost the same results of models built using mixed.solve from rrBLUP
  - Rscript 09_rrBLUP.r geno.csv pheno.csv all all 5 10 CVFs.csv exome_geno
  - Rscript 09_rrBLUP.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
