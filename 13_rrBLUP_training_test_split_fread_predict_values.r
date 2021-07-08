@@ -45,12 +45,14 @@ if (trait == 'all') {
 
 R2_cv <- c()
 R2_test <- c()
+Predict_validation <- c()
 Predict_test <- c()
 for(i in 1:length(Y)){
 	print(names(Y)[i])
 	Accuracy_CV <- c()
 	Accuracy_test <- c()
 	Coef <- c()
+	pred_val <- c()
 	pred_test <- c()
 	for(k in 1:number){
 		print(k)
@@ -86,17 +88,22 @@ for(i in 1:length(Y)){
 		accuracy_test <- cor(yhat[which(tst==0),i], y_test[which(tst==0),ncol(y_test)])
 		Accuracy_test <- c(Accuracy_test,accuracy_test^2)
 		Coef <- rbind(Coef,colMeans(Coeff))
+		pred_val <- cbind(pred_val,yhat$yhat[which(tst!=0)])
 		pred_test <- cbind(pred_test,y_test[which(tst==0),ncol(y_test)])
 		}
 	R2_cv <- cbind(R2_cv,Accuracy_CV)
 	R2_test <- cbind(R2_test,Accuracy_test)
 	write.csv(Coef,paste('Coef_',save_name,'_',names(Y)[i],'.csv',sep=''),row.names=F,quote=F)
-	colnames(pred_test) <- paste(names(Y)[i],'_',1:k,sep='')
+	colnames(pred_val) <- paste(names(Y)[i],'_',1:number,sep='')
+	Predict_validation <- cbind(Predict_validation,pred_val)
+	colnames(pred_test) <- paste(names(Y)[i],'_',1:number,sep='')
 	Predict_test <- cbind(Predict_test,pred_test)
 	}
 colnames(R2_cv) <- names(Y)
 write.csv(R2_cv,paste('R2_cv_results_',save_name,'.csv',sep=''),row.names=F,quote=F)
 colnames(R2_test) <- names(Y)
 write.csv(R2_test,paste('R2_test_results_',save_name,'.csv',sep=''),row.names=F,quote=F)
+rownames(Predict_validation) <- rownames(X)[which(tst!=0)]
+write.csv(Predict_validation,paste('Predict_value_cv_',save_name,'.csv',sep=''),row.names=T,quote=F)
 rownames(Predict_test) <- rownames(X)[test]
 write.csv(Predict_test,paste('Predict_value_test_',save_name,'.csv',sep=''),row.names=T,quote=F)
