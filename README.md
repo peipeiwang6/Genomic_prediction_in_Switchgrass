@@ -53,8 +53,8 @@
 > *If you have very large matrix, please try the 09_rrBLUP_fread.r instead.*
 
 > Note: 09_rrBLUP_fread_PCs.r builds a simple linear regression model using the PCs, which has almost the same results of models built using mixed.solve from rrBLUP
- - Rscript 09_rrBLUP.r geno.csv pheno.csv all all 5 10 CVFs.csv exome_geno
- - Rscript 09_rrBLUP.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
+ - Rscript 09_rrBLUP_fread_predict_values.r geno.csv pheno.csv all all 5 10 CVFs.csv exome_geno
+ - Rscript 09_rrBLUP_fread_predict_values.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
  or
  - Rscript 09_rrBLUP_fread_PCs.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
 
@@ -66,10 +66,9 @@
 
 > Step 12. if you want to do feature selection, then you should build models without the test set. So first, get the matrix for the training set, make the CVs file using the training individuals, then build models using the training matrices and output the coef of markers
 
-> *If you have very large matrix, please try the 11_split_geno_pheno_fread.r and 09_rrBLUP_fread.r instead.*
- - Rscript 11_split_geno_pheno.r geno.csv pheno.csv Test.txt
+ - Rscript 11_split_geno_pheno_fread.r  geno.csv pheno.csv Test.txt
  - python 07_make_CVs.py -file pheno_training.csv -cv 5 -number 10
- - Rscript 09_rrBLUP.r geno_training.csv pheno_training.csv all target_trait 5 10 CVFs.csv exome_geno
+ - Rscript 09_rrBLUP_fread_predict_values.r geno_training.csv pheno_training.csv all target_trait 5 10 CVFs.csv exome_geno
 
 > Step 13. select the number of markers based on the abs coef
  - python 12_select_markers_according_to_abs_coef.py  -coef coef_file -start 250 -stop 5250 -step 250
@@ -78,8 +77,7 @@
 
 #### The logical for the following script is that: first X% of all the individuals will be held out as test set, which will never be used in the model training process, the remaining 1-X% will be used to train the model, using exactly the same approach as step 10. For each cv fold, the model was also applied to the test set, and after run for all the cv folds, the average r2 across n cv folds will be used for the test set. 
 
-> *If you have very large matrix, please try the 13_rrBLUP_training_test_split_fread.r instead.*
- - Rscript 13_rrBLUP_training_test_split.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv selected_markers_geno
+ - Rscript 13_rrBLUP_training_test_split_fread_predict_values.r geno.csv pheno.csv selected_markers target_trait Test.txt 5 10 CVFs.csv selected_markers_geno
 
 > Step 15. get the prediction using the top 5 PCs for ramdomly selected markers. Make sure the title of the first column in your geno matrix is "ID".
  - Rscript 14_random_select_subset.r geno_file start stop step total_number
