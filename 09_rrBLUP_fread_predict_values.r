@@ -36,7 +36,7 @@ if(file.size(X_file) > 10*1024*1024){
 	}
 }
 
-# make sure X and Y have the same order of rows
+# make sure X and Y have the same order of rows as cvs
 X <- X[rownames(cvs),]
 Y <- Y[rownames(cvs),]
 
