@@ -68,12 +68,11 @@ The logical for the following script is that: for each cross-validation fold, us
 Note: 09_rrBLUP_fread_PCs.r builds a simple linear regression model using the PCs, which has similar results of models built using mixed.solve from rrBLUP
 
 	Rscript 09_rrBLUP_fread_predict_values.r geno.csv pheno.csv all all 5 10 CVFs.csv exome_geno
-	
 
 	
 	Rscript 09_rrBLUP_fread_predict_values.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
 	
-or
+	or
 
 	Rscript 09_rrBLUP_fread_PCs.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
 
