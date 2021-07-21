@@ -70,10 +70,8 @@ Note: 09_rrBLUP_fread_PCs.r builds a simple linear regression model using the PC
 	Rscript 09_rrBLUP_fread_predict_values.r geno.csv pheno.csv all all 5 10 CVFs.csv exome_geno
 
 	
-	Rscript 09_rrBLUP_fread_predict_values.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
-	
+	Rscript 09_rrBLUP_fread_predict_values.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca	
 	or
-
 	Rscript 09_rrBLUP_fread_PCs.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
 
 Steps 11-14 are how I did the feature selection. Markers were selected using the training set, and in the end, models built using selected markers were applied on the test set. Since I did 5-fold CV, thus 1/6 of individuals will be used as test set, and the remaining 5/6 individuals will be used in the 5-fold cv.
