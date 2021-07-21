@@ -65,9 +65,11 @@ The logical for the following script is that: for each cross-validation fold, us
 
 ### Step 10. genomic prediction using the genetic markers or population structure within a cross-validation scheme
 
-Note: 09_rrBLUP_fread_PCs.r builds a simple linear regression model using the PCs, which has almost the same results of models built using mixed.solve from rrBLUP
+Note: 09_rrBLUP_fread_PCs.r builds a simple linear regression model using the PCs, which has similar results of models built using mixed.solve from rrBLUP
 
 	Rscript 09_rrBLUP_fread_predict_values.r geno.csv pheno.csv all all 5 10 CVFs.csv exome_geno
+	
+
 	
 	Rscript 09_rrBLUP_fread_predict_values.r PCA5_geno.csv pheno.csv all all 5 10 CVFs.csv exome_pca
 	
