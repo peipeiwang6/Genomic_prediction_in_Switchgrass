@@ -50,7 +50,7 @@ def main():
 				for allele in var:
 					L.append(var[allele])
 				L.sort()
-				### if missing data < 20%, MAF(the second most common allele) > 0.05
+				### if missing data < 20%, MAF(the second most common allele) <= 0.05
 				if float(keep)/(len(tem)-4) >= 0.8 and float(L[-2])/(keep*4) > 0.05:
 					out.write(inl)
 					out.flush()
